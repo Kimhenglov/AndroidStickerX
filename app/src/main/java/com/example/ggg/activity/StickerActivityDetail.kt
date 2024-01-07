@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -44,7 +45,17 @@ class StickerActivityDetail : AppCompatActivity(){
         observerMealDetailsLiveData()
 
         onYoutubeImageClick()
+        onFavoriteClick()
 
+    }
+
+    private fun onFavoriteClick(){
+        binding.btnFav.setOnClickListener{
+            mealToSave?.let {
+                mealMvvm.insertMeal(it)
+                Toast.makeText(this,"Meal saved", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun onYoutubeImageClick(){
@@ -54,16 +65,20 @@ class StickerActivityDetail : AppCompatActivity(){
         }
     }
 
+    private var mealToSave :Meal?=null
+
     private fun observerMealDetailsLiveData(){
         mealMvvm.observerMealDetailsLiveData().observe(this,object : Observer<Meal>{
             override fun onChanged(value: Meal) {
                 val meal = value
 
+                mealToSave = meal
+
                 binding.tvCateforyInfo.text = "Category : ${meal!!.strCategory}"
                 binding.tvAreaInfo.text = "Area : ${meal.strArea}"
-                binding.tvContent.text = meal.strInstructions
+                binding.tvInstruction.text = meal.strInstructions
 
-                youtubeLink = meal.strYoutube
+                youtubeLink = meal.strYoutube.toString()
             }
         })
     }

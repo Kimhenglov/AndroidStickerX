@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.ggg.database.MealDatabase
 import com.example.ggg.pojo.Category
 import com.example.ggg.pojo.CategoryList
 import com.example.ggg.pojo.MealByCategoryList
@@ -11,16 +13,20 @@ import com.example.ggg.pojo.MealByCategory
 import com.example.myapplication.youtubeVD.pojo.Meal
 import com.example.myapplication.youtubeVD.pojo.MealList
 import com.example.myapplication.youtubeVD.retrofit.RetrofitInstance
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel(): ViewModel() {
+class HomeViewModel(
+    private val mealDatabase: MealDatabase
+): ViewModel() {
 
     private var ramdomMealLiveData = MutableLiveData<Meal>()
     private var popularItemsLiveData = MutableLiveData<List<MealByCategory>>()
 
     private var catagoriesLiveData = MutableLiveData<List<Category>>()
+    private var favoritesMealLiveData = mealDatabase.mealDao().getAllMeals()
 
     fun getRamdomMeal(){
         RetrofitInstance.api.getRamdomMeal().enqueue(object: Callback<MealList> {
@@ -71,6 +77,19 @@ class HomeViewModel(): ViewModel() {
 
 
 /////////////////
+
+    fun insertMeal(meal: Meal){
+        viewModelScope.launch {
+            mealDatabase.mealDao().upsert(meal)
+
+        }
+    }
+    fun delete(meal:Meal){
+        viewModelScope.launch {
+            mealDatabase.mealDao().delete(meal)
+        }
+    }
+    //////
     fun observeRandomMealLivedata():LiveData<Meal>{
         return ramdomMealLiveData
 
@@ -82,5 +101,9 @@ class HomeViewModel(): ViewModel() {
 
     fun observeCategoriesLiveData():LiveData<List<Category>>{
         return catagoriesLiveData
+    }
+
+    fun observeFavoritesMealsLiveData():LiveData<List<Meal>>{
+        return favoritesMealLiveData
     }
 }

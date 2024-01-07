@@ -12,7 +12,7 @@ interface MealDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)   //2 in 1 style insert + update
-    fun upsert(meal: Meal)
+    suspend fun upsert(meal: Meal)   // Andn't suspend
 
 
     @Delete

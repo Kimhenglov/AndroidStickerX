@@ -3,15 +3,25 @@ package com.example.ggg.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.ggg.R
+import com.example.ggg.database.MealDatabase
 import com.example.ggg.databinding.ActivityMainBinding
 import com.example.ggg.fragment.CategoryFragment
 import com.example.ggg.fragment.FavoriteFragment
 import com.example.ggg.fragment.HomeFragment
+import com.example.ggg.videoModel.HomeViewModelFactory
+import com.example.myapplication.youtubeVD.videoModel.HomeViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    val viewModel: HomeViewModel by lazy {
+        val mealDatabase = MealDatabase.getInstance(this)
+        val homeViewModelProviderFactory = HomeViewModelFactory(mealDatabase)
+        ViewModelProvider(this,homeViewModelProviderFactory)[HomeViewModel::class.java]
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
