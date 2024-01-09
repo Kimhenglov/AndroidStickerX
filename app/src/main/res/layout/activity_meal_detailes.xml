@@ -92,6 +92,8 @@
                     android:layout_height="wrap_content"
                     android:text="Area : Cambodia"
                     android:textStyle="bold"
+                    android:drawableLeft="@drawable/ic_location"
+                    android:drawableTint="@color/g_black"
                     android:textColor="@color/g_black"
                     android:layout_weight="1"/>
                 

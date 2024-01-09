@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.myapplication.youtubeVD.pojo.Meal
 
-@Database(entities = [Meal::class], version = 1,)
+@Database(entities = [Meal::class], version = 1)
 
 @TypeConverters(MealTypeConverter::class)
 
@@ -15,19 +15,20 @@ abstract class MealDatabase : RoomDatabase(){
     abstract fun mealDao(): MealDao
 
     companion object{
-        var INSTANCT: MealDatabase? = null
+        @Volatile
+        var INSTANCE: MealDatabase? = null
 
         @Synchronized
         fun getInstance (context: Context): MealDatabase{
-            if (INSTANCT == null){
-                INSTANCT= Room.databaseBuilder(
+            if (INSTANCE == null){
+                INSTANCE= Room.databaseBuilder(
                     context,
                     MealDatabase::class.java,
                     "meal.db",
 
                 ).fallbackToDestructiveMigration().build()
             }
-            return INSTANCT as MealDatabase
+            return INSTANCE as MealDatabase
 
         }
     }

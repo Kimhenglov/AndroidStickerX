@@ -12,9 +12,11 @@ class MostPopularAdapter (): RecyclerView.Adapter<MostPopularAdapter.PopularMeal
 
     private var mealList = ArrayList<MealByCategory>()
     lateinit var onItemClick:((MealByCategory) -> Unit)
+    var onLongItemClick:((MealByCategory) -> Unit)?=null
 
-    fun setMeals(mealList:ArrayList<MealByCategory>){
-        this.mealList = mealList
+
+    fun setMeals(mealByCategoryList:ArrayList<MealByCategory>){
+        this.mealList = mealByCategoryList
         notifyDataSetChanged()
     }
 
@@ -25,14 +27,21 @@ class MostPopularAdapter (): RecyclerView.Adapter<MostPopularAdapter.PopularMeal
     override fun getItemCount(): Int {
         return mealList.size
 
-
     }
 
     override fun onBindViewHolder(holder: PopularMealViewHolder, position: Int) {
-        Glide.with(holder.itemView).load(mealList[position].strMealThumb).into(holder.binding.imgPopularMealItem)
+        Glide.with(holder.itemView)
+                .load(mealList[position]
+                .strMealThumb)
+                .into(holder.binding.imgPopularMealItem)
 
         holder.itemView.setOnClickListener {
             onItemClick.invoke(mealList[position])
+        }
+
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(mealList[position])
+            true
         }
     }
 
