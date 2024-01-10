@@ -13,7 +13,7 @@ class CategoriesAdapter(): RecyclerView.Adapter<CategoriesAdapter.CategoryViewHo
 
     var onItemClick : ((Category)-> Unit)? = null
 
-    fun setCategoryList(categoryList: List<Category>){
+    fun setCategoryList(categoriesList: List<Category>){
         this.categoriesList = categoriesList as ArrayList<Category>
         notifyDataSetChanged()
 

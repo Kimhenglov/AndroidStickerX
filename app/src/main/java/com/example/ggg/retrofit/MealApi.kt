@@ -12,10 +12,10 @@ interface MealApi {
     @GET("random.php")
     fun getRamdomMeal(): Call<MealList>
 
-    @GET("lookup.php?")
+    @GET("lookup.php")
     fun getMealDetails(@Query("i") id:String) : Call<MealList>
 
-    @GET("filter.php?")
+    @GET("filter.php")
     fun getPopularItems(@Query("c") categoryName:String) : Call<MealByCategoryList>
 
     @GET("categories.php")
@@ -23,5 +23,9 @@ interface MealApi {
 
     @GET("filter.php")
     fun getMealByCategory(@Query("c") categoryName: String) : Call<MealByCategoryList>
+
+
+    @GET("search.php")
+    fun searchMeals(@Query("s") searchQuery: String) : Call<MealList>
 
 }

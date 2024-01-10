@@ -7,15 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.ggg.R
 import com.example.ggg.activity.CategoryMealsActivity
 import com.example.ggg.activity.MainActivity
 import com.example.ggg.activity.StickerActivityDetail
 import com.example.ggg.adapter.CategoriesAdapter
 import com.example.ggg.adapter.MostPopularAdapter
 import com.example.ggg.databinding.FragmentHomeBinding
+import com.example.ggg.fragment.bottomSheet.StickerBottomSheetFragment
 import com.example.ggg.pojo.MealByCategory
 import com.example.myapplication.youtubeVD.pojo.Meal
 import com.example.myapplication.youtubeVD.videoModel.HomeViewModel
@@ -29,6 +32,7 @@ class HomeFragment : Fragment() {
     private lateinit var categoriesAdapter: CategoriesAdapter
 
     ///
+
 
     companion object{
         const val MEAL_ID = "com.example.ggg.fragment.idMeal"
@@ -84,16 +88,35 @@ class HomeFragment : Fragment() {
 
         onCategoryCLick()   ////MMM
 
+        onPopularItemLongClick()
+
+        onSearchIconClick()
+
 
     }
+
 
     /////
 
     /////MMM<
 
+    private fun onSearchIconClick(){
+        binding.searchIcon.setOnClickListener {
+            //findNavController().navigate(R.id.action)
+        }
+    }
+
+    private fun onPopularItemLongClick(){
+        popularItemAdapter.onLongItemClick = { meal ->
+            val stickerBottomSheetFragment = StickerBottomSheetFragment.newInstance(meal.idMeal)
+//
+            stickerBottomSheetFragment.show(childFragmentManager,"Meal Info")
+        }
+    }
+
     private fun onCategoryCLick(){
-        categoriesAdapter.onItemClick = {
-                category -> val intent = Intent(activity,CategoryMealsActivity::class.java)
+        categoriesAdapter.onItemClick = { category ->
+            val intent = Intent(activity,CategoryMealsActivity::class.java)
             intent.putExtra(CATEGORY_NAME,category.strCategory)
             startActivity(intent)
 
@@ -139,7 +162,7 @@ class HomeFragment : Fragment() {
 
     private fun observePopularItemsLiveData(){
         viewModel.oberservePopularItemsLiveData().observe(viewLifecycleOwner,
-        ){ mealList -> popularItemAdapter.setMeals(mealList = mealList as ArrayList<MealByCategory>)  }
+        ){ mealList -> popularItemAdapter.setMeals(mealByCategoryList = mealList as ArrayList<MealByCategory>)  }
     }
 
     private fun onRamdomMealClick(){
